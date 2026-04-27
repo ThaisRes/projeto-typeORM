@@ -1,0 +1,51 @@
+GET http://localhost:3000/api/users
+
+###
+
+GET http://localhost:3000/api/users/4
+
+###
+
+GET http://localhost:3000/api/users/active
+
+###
+
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    "firstName": "Marco Aurelio 2",
+    "lastName": "Hansen",
+    "email": "email2@email.com"
+}
+
+###
+
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    
+}
+
+###
+
+DELETE http://localhost:3000/api/users/1
+
+###
+
+PATCH http://localhost:3000/api/users/5
+Content-Type: application/json
+
+{
+    "firstName": "Maria",
+    "lastName": "Gonçalves"
+}
+
+###
+
+PATCH http://localhost:3000/api/users/2/toggle
+
+
+
+ 

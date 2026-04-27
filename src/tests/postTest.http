@@ -1,0 +1,36 @@
+
+GET http://localhost:3000/api/posts
+
+###
+
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+
+{
+    "title": "Meu post",
+    "content": "conteudo do post",
+    "userId": 6
+}
+
+###
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+
+{
+    
+}
+
+###
+
+PATCH http://localhost:3000/api/posts/9
+Content-Type: application/json
+
+{
+    "title": "Meu post modificado",
+    "content": "conteudo do post modificado"
+}
+
+###
+
+DELETE http://localhost:3000/api/posts/10
+
