@@ -10,14 +10,14 @@ export class UserController{
 
     create = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const{firstName, lastName, email} = req.body;
+            const{firstName, lastName, email, phone} = req.body;
 
             const emailCheck = await this.userRepository.findOneBy({email});
             if(emailCheck){
                 throw new BadRequestError("Este email já está em uso.");
             }
 
-            const newUser = this.userRepository.create({firstName, lastName, email});
+            const newUser = this.userRepository.create({firstName, lastName, email, phone});
             const errors = await validate(newUser);
             if(errors.length > 0){
                 const formattedErrors = formatErrors(errors);
