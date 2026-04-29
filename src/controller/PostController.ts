@@ -60,9 +60,20 @@ export class PostController{
                 throw new NotFoundError("Post não encontrado.")
             }
             
+            if(userId){
+                if (isNaN(userId)) {
+                    throw new BadRequestError("Id do usuário inválido");
+                    }
+                    const user = await this.userRepository.findOneBy({ id: userId });
+                    if (!user) {
+                        throw new NotFoundError("Usuário não encontrado.");
+                }
+                post.user = user ?? post.user;
+            }
+
             post.title = title ?? post.title;
             post.content = content ?? post.content;
-            post.user = userId ?? post.user;
+            
             const errors = await validate(post);
             if(errors.length > 0){
                 const formattedErrors = formatErrors(errors);
