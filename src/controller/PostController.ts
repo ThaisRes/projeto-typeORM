@@ -55,7 +55,7 @@ export class PostController{
                 throw new BadRequestError("Id inválido.")
             }
 
-            const post = await this.postRepository.findOneBy({id});
+            const post = await this.postRepository.findOneBy({id:userId});
             if(!post) {
                 throw new NotFoundError("Post não encontrado.")
             }

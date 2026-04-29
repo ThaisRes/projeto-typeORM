@@ -58,7 +58,7 @@ export class UserController{
     update = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = Number(req.params.id);
-            const {firstName, lastName, email} = req.body;
+            const {firstName, lastName, email, phone} = req.body;
             
             if(isNaN(id)){
                 throw new BadRequestError("Id inválido.")
@@ -77,6 +77,12 @@ export class UserController{
             user.firstName = firstName ?? user.firstName;
             user.lastName = lastName ?? user.lastName;
             user.email = email ?? user.email;
+            user.phone = phone ?? user.phone;
+            const errors = await validate(user);
+            if(errors.length > 0){
+                const formattedErrors = formatErrors(errors);
+                throw new BadRequestError("Falha na validação", formattedErrors);
+            }
             await this.userRepository.save(user);  //também existe o update para esses casos
             return res.status(200).json({message: "Usuário atualizado com sucesso.", user: user});
 
