@@ -2,7 +2,7 @@ GET http://localhost:3000/api/users
 
 ###
 
-GET http://localhost:3000/api/users/4
+GET http://localhost:3000/api/users/8
 
 ###
 
@@ -12,12 +12,14 @@ GET http://localhost:3000/api/users/active
 
 POST http://localhost:3000/api/users
 Content-Type: application/json
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 {
     "firstName": "Marco Aurelio 2",
     "lastName": "Hansen",
     "email": "email2@email.com",
-    "phone": "(24)91234-1234"
+    "phone": "(24)91234-1234",
+    "password": "123456"
 }
 
 ###

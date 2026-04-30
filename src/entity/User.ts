@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Post } from "./Post";
-import { IsNotEmpty, IsString, IsEmail, Validate} from "class-validator";
+import { IsNotEmpty, IsString, IsEmail, Validate, MinLength} from "class-validator";
 import { IsBrPhoneConstraint } from "../decorators/isBrPhone";
 
 @Entity()
@@ -22,6 +22,11 @@ export class User {
     @IsNotEmpty({message: 'O celular é obrigatório'})
     @Validate(IsBrPhoneConstraint)
     phone!:string;
+
+    @Column({type: "varchar", select: false})
+    @IsNotEmpty({message: " A senha é obrigatória"})
+    @MinLength(6, {message: "A senha deve ter no mínimo 6 caracteres"})
+    password!: string;
 
     @Column({type:"boolean", default: true})
     isActive!: boolean;
