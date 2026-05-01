@@ -12,7 +12,6 @@ GET http://localhost:3000/api/users/active
 
 POST http://localhost:3000/api/users
 Content-Type: application/json
-Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 {
     "firstName": "Marco Aurelio 2",

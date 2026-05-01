@@ -13,13 +13,17 @@ Content-Type: application/json
 }
 
 ###
+
+@auth= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzc3NTkxOTcxLCJleHAiOjE3Nzc2MjA3NzF9.2ZKK4pJA2PyQy-ubeRGR3hz4DPNnpj9FZTZGn1sb1k0
+
 POST http://localhost:3000/api/posts
 Content-Type: application/json
+Authorization: Bearer {{auth}}
 
 {
-    "title": "",
+    "title": "titulo",
     "content": "conteudo do post",
-    "userId": 6
+    "userId": 9
 }
 
 ###

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { UserController} from "../controller/UserController";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 const router = Router();
 const userController = new UserController();
@@ -9,7 +10,7 @@ router.get("/", userController.list);
 router.get("/active", userController.listActive);
 router.get("/:id", userController.listById);
 router.delete("/:id", userController.delete);
-router.patch("/:id", userController.update);
+router.patch("/:id", authMiddleware, userController.update);
 router.patch("/:id/toggle", userController.toggleActive);
 
 export const userRoutes = router;
