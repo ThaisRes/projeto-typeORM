@@ -1,5 +1,5 @@
 import { AppDataSource } from "../data-source";
-import { User } from "../entity/User";
+import { User, UserRole } from "../entity/User";
 import bcrypt from "bcryptjs";
 import { BadRequestError, NotFoundError } from "../helpers/apiError";
 import { validate } from "class-validator";
@@ -85,4 +85,13 @@ export class UserService {
         await this.userRepository.save(user);
         return user;
     };
+
+    updateRole = async(id: number, newRole: UserRole) => {
+        const user = await this.userRepository.findOneBy({id});
+        if(!user) {
+            throw new NotFoundError("Usuário não encontrado");
+        }
+        user.role = newRole;
+        return await this.userRepository.save(user);
+    }
 };

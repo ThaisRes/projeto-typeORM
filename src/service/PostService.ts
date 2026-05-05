@@ -1,10 +1,9 @@
 import { AppDataSource } from "../data-source";
 import { Post } from "../entity/Post";
-import bcrypt from "bcryptjs";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../helpers/apiError";
 import { validate } from "class-validator";
 import { formatErrors } from "../helpers/formatErrors";
-import { User } from "../entity/User";
+import { User, UserRole } from "../entity/User";
 
 export class PostService {
     private postRepository = AppDataSource.getRepository(Post);
@@ -32,10 +31,14 @@ export class PostService {
         return await this.postRepository.save({title, content, user});
     }
 
-    update = async (postId: number, userId: number, data: Partial<Post>) => {
+    update = async (postId: number, userId: number, userRole: UserRole, data: Partial<Post>) => {
         const post = await this.postRepository.findOne({where: {id:userId}, relations: ["user"]});
         if(!post) {
             throw new NotFoundError("Post não encontrado.")
+        }
+
+        if(userRole !== UserRole.USER){
+            throw new UnauthorizedError("Você não tem permissão para atualizar esse post.")
         }
 
         if(post.user.id!== userId){
@@ -46,10 +49,14 @@ export class PostService {
         return await this.postRepository.save(post);   
     }
 
-    delete = async (id: number, userId: number) => {
+    delete = async (id: number, userId: number, userRole: UserRole) => {
         const post = await this.postRepository.findOneBy({id});
         if(!post){
             throw new NotFoundError("Post não encontrado.")
+        }
+
+        if(userRole !== UserRole.ADMIN && userRole !== UserRole.USER){
+            throw new UnauthorizedError("Você não tem permissão para deletar esse post.")
         }
 
         if(post.user.id!== userId){

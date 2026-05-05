@@ -41,11 +41,12 @@ export class PostController{
         try {
             const postId = Number(req.params.id);
             const userId = req.user_id;
+            const userRole = req.user_role;
             if (isNaN(postId)) {
               throw new BadRequestError("Id do post inválido");
             }
             await this.postService.validateSchema(req.body, true);
-            const post = await this.postService.update(postId, userId!, req.body);
+            const post = await this.postService.update(postId, userId!, userRole, req.body);
             return res.status(200).json(post);
         } catch (error: unknown) {
             next(error);
@@ -56,12 +57,13 @@ export class PostController{
         try {
             const id = Number(req.params.id);
             const userId = req.user_id;
+            const userRole = req.user_role;
 
             if(isNaN(id)){
                 throw new BadRequestError("Id inválido.")
             }
 
-            await this.postService.delete(id, userId!);
+            await this.postService.delete(id, userId!, userRole);
             return res.status(204).send();
         } catch (error:unknown) {
             next(error);
