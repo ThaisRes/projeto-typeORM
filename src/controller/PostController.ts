@@ -6,15 +6,15 @@ import { BadRequestError, NotFoundError } from "../helpers/apiError";
 import { validate } from "class-validator";
 import { IValidationError } from "../types/IValidationErrors";
 import { formatErrors } from "../helpers/formatErrors";
+import { PostService } from "../service/PostService";
 
 
 export class PostController{
-    private postRepository = AppDataSource.getRepository(Post);
-    private userRepository = AppDataSource.getRepository(User);
+    private postService = new PostService;
 
     list = async (req:Request, res:Response, next: NextFunction) => {
         try {
-            const posts = await this.postRepository.find();
+            const posts = await this.postService.listAll();
             return res.json(posts);
         } catch (error:unknown) {
             next(error)
@@ -29,18 +29,8 @@ export class PostController{
                 throw new BadRequestError("Id inválido.");
             }
 
-            const user = await this.userRepository.findOneBy({id: userId});
-            if(!user){
-                throw new NotFoundError("Usuário não encontrado.");
-            }
-
-            const newPost = this.postRepository.create({title, content, user});
-            const errors = await validate(newPost);
-            if(errors.length > 0){
-                const formattedErrors = formatErrors(errors);
-                throw new BadRequestError("Falha na validação", formattedErrors);
-            }
-            await this.postRepository.save(newPost);
+            await this.postService.validateSchema(req.body);
+            const newPost = await this.postService.create(title, content, userId!);
             return res.status(201).json(newPost);
         } catch (error:unknown) {
             next(error)
@@ -50,37 +40,13 @@ export class PostController{
     update = async (req:Request, res:Response, next: NextFunction) => {
         try {
             const postId = Number(req.params.id);
-            const {title, content} = req.body;
             const userId = req.user_id;
-
-            if(isNaN(postId)){
-                throw new BadRequestError("Id inválido.")
+            if (isNaN(postId)) {
+              throw new BadRequestError("Id do post inválido");
             }
-
-            const post = await this.postRepository.findOneBy({id:userId});
-            if(!post) {
-                throw new NotFoundError("Post não encontrado.")
-            }
-            
-            if(userId){
-                if (isNaN(userId)) {throw new BadRequestError("Id do usuário inválido");}
-                const user = await this.userRepository.findOneBy({ id: userId });
-                if (!user) {throw new NotFoundError("Usuário não encontrado.");}
-                post.user = user ?? post.user;
-            }
-
-            post.title = title ?? post.title;
-            post.content = content ?? post.content;
-            
-            const errors = await validate(post);
-            if(errors.length > 0){
-                const formattedErrors = formatErrors(errors);
-                throw new BadRequestError("Falha na validação", formattedErrors);
-            }
-            await this.postRepository.save(post);
-
-            return res.status(200).json({message: "Post atualizado com sucesso.", post: post});
-
+            await this.postService.validateSchema(req.body, true);
+            const post = await this.postService.update(postId, userId!, req.body);
+            return res.status(200).json(post);
         } catch (error: unknown) {
             next(error);
         }
@@ -89,14 +55,13 @@ export class PostController{
     delete = async (req:Request, res:Response, next: NextFunction) =>{
         try {
             const id = Number(req.params.id);
+            const userId = req.user_id;
+
             if(isNaN(id)){
                 throw new BadRequestError("Id inválido.")
             }
 
-            const result = await this.postRepository.delete(id);
-            if(result.affected === 0) {
-                throw new NotFoundError("Post não encontrado.")
-            }
+            await this.postService.delete(id, userId!);
             return res.status(204).send();
         } catch (error:unknown) {
             next(error);

@@ -1,3 +1,4 @@
+@auth= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzc3OTQwODk3LCJleHAiOjE3Nzc5Njk2OTd9.gGeB8Fhrqp5Br4EeIwfSuCq-QXDUgd75NDBbONqiLV4
 
 GET http://localhost:3000/api/posts
 
@@ -13,8 +14,6 @@ Content-Type: application/json
 }
 
 ###
-
-@auth= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzc3NTkxOTcxLCJleHAiOjE3Nzc2MjA3NzF9.2ZKK4pJA2PyQy-ubeRGR3hz4DPNnpj9FZTZGn1sb1k0
 
 POST http://localhost:3000/api/posts
 Content-Type: application/json
@@ -42,6 +41,17 @@ Content-Type: application/json
 {
     "title": "Meu post modificado",
     "content": "conteudo do post modificado"
+}
+
+###
+@auth= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzc3OTQwODk3LCJleHAiOjE3Nzc5Njk2OTd9.gGeB8Fhrqp5Br4EeIwfSuCq-QXDUgd75NDBbONqiLV4
+
+PATCH  http://localhost:3000/api/posts/14
+Content-Type: application/json
+Authorization: Bearer {{auth}}
+
+{
+  "title": "teste teste novo teste"
 }
 
 ###

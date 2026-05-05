@@ -45,8 +45,19 @@ Content-Type: application/json
 }
 
 ###
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsImlhdCI6MTc3NzkzMjUzMiwiZXhwIjoxNzc3OTYxMzMyfQ.5uaBPR27lnk6YLBG6X6LBhp9rWyOVlLBlSkwT89D_H4
 
 PATCH http://localhost:3000/api/users/2/toggle
+
+###
+
+PATCH  http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "email": "Hansen de Oliveira 22"
+}
 
 
 
