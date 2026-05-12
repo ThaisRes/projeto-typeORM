@@ -5,8 +5,19 @@ import { userRoutes } from "./routes/userRoutes";
 import { postRoutes } from "./routes/postRoutes";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { authRoutes } from "./routes/authRoutes";
+import { countReset } from "node:console";
+import cors from "cors";
 
 const app: Application = express();
+
+app.use(
+    cors({
+        origin: process.env.FRONT_URL,
+        methods: ["GET", "POST", "PATCH", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"]
+    })
+)
+
 app.use(express.json());
 app.use("/api/login", authRoutes);
 app.use("/api/users", userRoutes);
